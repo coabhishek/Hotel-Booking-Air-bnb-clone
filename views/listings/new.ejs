@@ -1,0 +1,135 @@
+<% layout('layouts/boilerPlate') %>
+
+<div class="row mt-3 mb-5">
+  <div class="col-8 offset-2">
+    <h3 class="fw-bold mb-4">Create a New Listing</h3>
+
+    <form 
+      action="/listings" 
+      method="POST" 
+      class="needs-validation"
+      novalidate  
+      enctype="multipart/form-data"
+    >
+      <!-- Title -->
+      <div class="mb-3">
+        <label for="title" class="form-label fw-semibold">Title</label>
+        <input 
+          type="text" 
+          id="title" 
+          name="listing[title]" 
+          placeholder="Add a catchy title" 
+          class="form-control" 
+          required 
+        />
+        <div class="invalid-feedback">Please enter a valid title.</div>
+      </div>
+
+      <!-- Description -->
+      <div class="mb-3">
+        <label for="description" class="form-label fw-semibold">Description</label>
+        <textarea 
+          id="description" 
+          name="listing[description]" 
+          placeholder="Write a brief description..." 
+          class="form-control" 
+          rows="4" 
+          required
+        ></textarea>
+        <div class="invalid-feedback">Please enter a short description.</div>
+      </div>
+
+      <!-- Category Selection Dropdown -->
+      <div class="mb-3">
+        <label for="category" class="form-label fw-semibold">Category</label>
+        <select 
+          name="listing[category]" 
+          id="category" 
+          class="form-select" 
+          required
+        >
+          <option value="" disabled selected>Select Category</option>
+          <option value="Trending">Trending</option>
+          <option value="Rooms">Rooms</option>
+          <option value="Iconic Cities">Iconic Cities</option>
+          <option value="Mountains">Mountains</option>
+          <option value="Castles">Castles</option>
+          <option value="Amazing Pools">Amazing Pools</option>
+          <option value="Camping">Camping</option>
+          <option value="Farms">Farms</option>
+          <option value="Arctic">Arctic</option>
+          <option value="Domes">Domes</option>
+          <option value="Beachfront">Beachfront</option>
+        </select>
+        <div class="invalid-feedback">Please select a category.</div>
+      </div>
+
+      <!-- Image File Upload -->
+      <div class="mb-3">
+        <label for="image" class="form-label fw-semibold">Upload Listing Image</label>
+        <input 
+          type="file" 
+          id="image" 
+          name="listing[image]" 
+          class="form-control"
+          required
+        />
+        <div class="invalid-feedback">Please upload an image file.</div>
+      </div>
+
+      <!-- Price & Country -->
+      <div class="row">
+        <div class="mb-3 col-md-4">
+          <label for="price" class="form-label fw-semibold">Price (&#8377;)</label>
+          <input 
+            type="number" 
+            id="price" 
+            name="listing[price]" 
+            placeholder="1200" 
+            class="form-control" 
+            required 
+            min="0"
+          />
+          <div class="invalid-feedback">Price should be a valid number.</div>
+        </div>
+
+        <div class="mb-3 col-md-8">
+          <label for="country" class="form-label fw-semibold">Country</label>
+          <input 
+            type="text" 
+            id="country" 
+            name="listing[country]" 
+            placeholder="India" 
+            class="form-control" 
+            required 
+          />
+          <div class="invalid-feedback">Country name is required.</div>
+        </div>
+      </div>
+
+      <!-- Location -->
+      <div class="mb-3">
+        <label for="location" class="form-label fw-semibold">Location</label>
+        <input 
+          type="text" 
+          id="location" 
+          name="listing[location]" 
+          placeholder="Jaipur, Rajasthan" 
+          class="form-control" 
+          required 
+        />
+        <div class="invalid-feedback">Location is required.</div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="d-flex gap-2 mt-4">
+        <button type="submit" class="btn btn-danger px-4 py-2 fw-semibold rounded-3">
+          Add Listing
+        </button>
+        <a href="/listings" class="btn btn-outline-dark px-4 py-2 fw-semibold rounded-3">
+          Cancel
+        </a>
+      </div>
+    </form>
+  </div>
+</div>

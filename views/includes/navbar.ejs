@@ -1,0 +1,76 @@
+<nav class="navbar navbar-expand-md bg-white border-bottom sticky-top custom-navbar">
+  <div class="container-fluid px-md-5">
+    
+    <!-- Brand Logo -->
+    <a class="navbar-brand text-danger fw-bold fs-4 d-flex align-items-center me-4" href="/listings">
+      <i class="fa-regular fa-compass me-2 fs-3 text-danger"></i>
+      <span class="brand-text">wanderlust</span>
+    </a>
+
+    <!-- Mobile Toggler -->
+    <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+      
+      <!-- Explore Link -->
+      <div class="navbar-nav align-items-md-center me-3">
+        <a class="nav-link text-dark fw-semibold px-3 search-btn rounded-pill" href="/listings">
+          Explore
+        </a>
+      </div>
+
+      <!-- Center: Airbnb Style Search Bar -->
+      <form action="/listings" method="GET" class="d-none d-md-flex align-items-center rounded-pill border shadow-sm px-2 py-1 mx-auto search-bar-container">
+        <input 
+          type="text" 
+          name="q" 
+          class="form-control border-0 shadow-none bg-transparent search-input ps-3" 
+          placeholder="Search destinations, title..."
+          value="<%= typeof searchQuery !== 'undefined' ? searchQuery : '' %>"
+        >
+        <button type="submit" class="btn btn-danger rounded-circle p-2 ms-2 d-flex align-items-center justify-content-center search-btn-circle">
+          <i class="fa-solid fa-magnifying-glass fs-6 text-white"></i>
+        </button>
+      </form>
+
+      <!-- Right Action Items (Airbnb Style Profile Pill) -->
+      <div class="navbar-nav ms-auto align-items-md-center gap-2 mt-2 mt-md-0">
+        
+        <!-- Airbnb Your Home Link -->
+        <a class="nav-link text-dark fw-semibold px-3 py-2 rounded-pill airbnb-home-link text-nowrap" href="/listings/new">
+          Airbnb your home
+        </a>
+
+        <!-- Profile Pill Dropdown -->
+        <div class="nav-item dropdown">
+          <a class="nav-link profile-pill d-flex align-items-center gap-2 border rounded-pill px-3 py-1 bg-white shadow-sm" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="fa-solid fa-bars fs-6 text-secondary"></i>
+            <% if (currUser) { %>
+              <div class="user-avatar bg-dark text-white rounded-circle d-flex align-items-center justify-content-center fw-bold">
+                <%= currUser.username.charAt(0).toUpperCase() %>
+              </div>
+            <% } else { %>
+              <i class="fa-solid fa-circle-user fs-4 text-secondary"></i>
+            <% } %>
+          </a>
+
+          <!-- Dropdown Options (Signup, Login, Logout) -->
+          <ul class="dropdown-menu dropdown-menu-end border-0 shadow-lg rounded-4 mt-2 py-2">
+            <% if(!currUser) { %>
+              <li><a class="dropdown-item fw-bold py-2 px-4" href="/signup">Sign up</a></li>
+              <li><a class="dropdown-item py-2 px-4" href="/login">Log in</a></li>
+            <% } else { %>
+              <li class="dropdown-header text-muted px-4 py-1"><span class="profile">Profile</span> <b><%= currUser.username %></b></li>
+              <li><hr class="dropdown-divider my-1"></li>
+              <li><a class="dropdown-item text-danger py-2 px-4 fw-semibold" href="/logout">Log out</a></li>
+            <% } %>
+          </ul>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</nav>

@@ -1,0 +1,135 @@
+<% layout('/layouts/boilerPlate') -%> 
+
+<body>
+  <div class="container-fluid px-md-5 mt-3">
+
+    <!-- Filters & Tax Switch Outer Wrapper -->
+    <div class="d-flex align-items-center justify-content-between gap-3 mb-4">
+      
+      <!-- Category Filters (Horizontal Scrollable Area) -->
+    <!-- Category Filters -->
+<div id="filters" class="d-flex align-items-center gap-4 overflow-auto py-2 pe-3">
+  
+  <a href="/listings?category=Trending" class="text-decoration-none text-secondary filter text-center">
+    <div><i class="fa-solid fa-fire fs-5"></i></div>
+    <p class="mb-0 filter-text">Trending</p>
+  </a>
+
+  <a href="/listings?category=Rooms" class="text-decoration-none text-secondary filter text-center">
+    <div><i class="fa-solid fa-bed fs-5"></i></div>
+    <p class="mb-0 filter-text">Rooms</p>
+  </a>
+
+  <a href="/listings?category=Iconic Cities" class="text-decoration-none text-secondary filter text-center">
+    <div><i class="fa-solid fa-mountain-city fs-5"></i></div>
+    <p class="mb-0 filter-text">Iconic Cities</p>
+  </a>
+
+  <a href="/listings?category=Mountains" class="text-decoration-none text-secondary filter text-center">
+    <div><i class="fa-solid fa-mountain fs-5"></i></div>
+    <p class="mb-0 filter-text">Mountains</p>
+  </a>
+
+  <a href="/listings?category=Castles" class="text-decoration-none text-secondary filter text-center">
+    <div><i class="fa-solid fa-fort-awesome fs-5"></i></div>
+    <p class="mb-0 filter-text">Castles</p>
+  </a>
+
+  <a href="/listings?category=Amazing Pools" class="text-decoration-none text-secondary filter text-center">
+    <div><i class="fa-solid fa-person-swimming fs-5"></i></div>
+    <p class="mb-0 filter-text">Amazing Pools</p>
+  </a>
+
+  <a href="/listings?category=Camping" class="text-decoration-none text-secondary filter text-center">
+    <div><i class="fa-solid fa-campground fs-5"></i></div>
+    <p class="mb-0 filter-text">Camping</p>
+  </a>
+
+  <a href="/listings?category=Farms" class="text-decoration-none text-secondary filter text-center">
+    <div><i class="fa-solid fa-cow fs-5"></i></div>
+    <p class="mb-0 filter-text">Farms</p>
+  </a>
+
+  <a href="/listings?category=Arctic" class="text-decoration-none text-secondary filter text-center">
+    <div><i class="fa-solid fa-snowflake fs-5"></i></div>
+    <p class="mb-0 filter-text">Arctic</p>
+  </a>
+
+  <a href="/listings?category=Domes" class="text-decoration-none text-secondary filter text-center">
+    <div><i class="fa-solid fa-igloo fs-5"></i></div>
+    <p class="mb-0 filter-text">Domes</p>
+  </a>
+
+  <a href="/listings?category=Beachfront" class="text-decoration-none text-secondary filter text-center">
+    <div><i class="fa-solid fa-umbrella-beach fs-5"></i></div>
+    <p class="mb-0 filter-text">Beachfront</p>
+  </a>
+
+</div>
+      <!-- Tax Toggle Switch Container -->
+      <div class="tax-toggle border rounded-4 px-3 py-2 d-flex align-items-center justify-content-between flex-shrink-0 shadow-sm">
+        <label class="form-check-label fw-semibold me-3 small cursor-pointer" for="flexSwitchCheckDefault">
+          Display total after taxes
+        </label>
+        <div class="form-check form-switch m-0 p-0 d-flex align-items-center">
+          <input class="form-check-input custom-switch m-0" type="checkbox" role="switch" id="flexSwitchCheckDefault">
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Listings Grid -->
+    <div class="row row-cols-lg-3 row-cols-md-2 row-cols-1 g-4 mb-5">
+      <% for(let listing of allListing) { %>
+        <div class="col">
+          <a href="/listings/<%= listing._id %>" class="text-decoration-none text-dark">
+            <div class="card h-100 border-0 listing-card">
+              
+              <!-- Image Card -->
+              <div class="position-relative overflow-hidden rounded-4 mb-2" style="height: 18rem;">
+                <img
+                  src="<%= listing.image && listing.image.url ? listing.image.url : 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e' %>"
+                  class="card-img-top w-100 h-100 object-fit-cover"
+                  alt="listing_image"
+                />
+                <div class="position-absolute top-0 end-0 m-3 text-white fs-5">
+                  <i class="fa-regular fa-heart"></i>
+                </div>
+              </div>
+
+              <!-- Content Details -->
+              <div class="card-body p-0">
+                <div class="d-flex justify-content-between align-items-start">
+                  <h6 class="card-title fw-bold mb-0 text-truncate"><%= listing.title %></h6>
+                  <span class="small fw-semibold"><i class="fa-solid fa-star fs-6"></i> 4.9</span>
+                </div>
+                <p class="text-secondary small mb-1"><%= listing.location %>, <%= listing.country %></p>
+                <p class="card-text mb-0">
+                  <span class="fw-bold">&#8377; <%= listing.price ? listing.price.toLocaleString("en-IN") : "N/A" %></span> 
+                  <span class="fw-normal text-secondary small">/ night</span>
+                  <i class="tax-info text-secondary small" style="display: none;"> &nbsp; +18% GST</i>
+                </p>
+              </div>
+
+            </div>
+          </a>
+        </div>
+      <% } %>
+    </div>
+
+  </div>
+
+  <script>
+    let taxSwitch = document.getElementById("flexSwitchCheckDefault");
+    taxSwitch.addEventListener("click", () => {
+      let taxInfo = document.getElementsByClassName("tax-info");
+      for (let info of taxInfo) {
+        if (info.style.display !== "inline") {
+          info.style.display = "inline";
+        } else {
+          info.style.display = "none";
+        }
+      }
+    });
+  </script>
+</body>

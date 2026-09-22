@@ -1,0 +1,178 @@
+<% layout('layouts/boilerPlate') %>
+
+<!-- Mapbox GL JS & CSS CDN -->
+<link href="https://api.mapbox.com/mapbox-gl-js/v3.0.1/mapbox-gl.css" rel="stylesheet" />
+<script src="https://api.mapbox.com/mapbox-gl-js/v3.0.1/mapbox-gl.js"></script>
+
+<div class="row mt-3 mb-5">
+  <!-- Title Section -->
+  <div class="col-8 offset-2 mb-3">
+    <h3 class="fw-bold mb-1"><%= listing.title %></h3>
+    <p class="text-secondary small">
+      <i class="fa-solid fa-location-dot text-danger me-1"></i>
+      <%= listing.location %>, <%= listing.country %>
+    </p>
+  </div>
+
+  <!-- Main Display Card -->
+  <div class="card col-8 offset-2 show-card listing-card border-0 shadow-sm rounded-4 overflow-hidden p-0 mb-4">
+    <!-- Image -->
+    <div style="height: 24rem" class="overflow-hidden position-relative">
+      <img src="<%= listing.image && listing.image.url ? listing.image.url : 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e' %>" class="card-img-top w-100 h-100 object-fit-cover" alt="listing_image" />
+    </div>
+
+    <!-- Body Details -->
+    <div class="card-body p-4">
+      <div class="d-flex justify-content-between align-items-center mb-3 pb-3 border-bottom">
+        <div>
+          <h5 class="fw-bold mb-0">Owned By <i><%= listing.owner ? listing.owner.username : "Anonymous" %></i></h5>
+          <small class="text-muted">Entire home &middot; 4 guests &middot; 2 bedrooms &middot; 2 baths</small>
+        </div>
+        <span class="badge bg-danger fs-6 px-3 py-2 rounded-pill">
+          &#8377; <%= listing.price ? listing.price.toLocaleString("en-IN") : "N/A" %> <span class="fw-normal fs-6">/ night</span>
+        </span>
+      </div>
+
+      <!-- Description -->
+      <h5 class="fw-bold mt-4">About this place</h5>
+      <p class="card-text text-secondary lh-lg mb-4">
+        <%= listing.description %>
+      </p>
+
+      <!-- Amenities Section -->
+      <div class="mb-4 pb-3 border-bottom">
+        <h5 class="fw-bold mb-3">What this place offers</h5>
+        <div class="row g-3">
+          <div class="col-6"><i class="fa-solid fa-wifi me-2 text-danger"></i> Fast Wifi</div>
+          <div class="col-6"><i class="fa-solid fa-square-parking me-2 text-danger"></i> Free parking on premises</div>
+          <div class="col-6"><i class="fa-solid fa-utensils me-2 text-danger"></i> Kitchen</div>
+          <div class="col-6"><i class="fa-solid fa-tv me-2 text-danger"></i> HDTV with Netflix</div>
+        </div>
+      </div>
+
+      <!-- Action Buttons (Only visible to Listing Owner) -->
+      <% if(currUser && listing.owner && currUser._id.equals(listing.owner._id)) { %>
+      <div class="d-flex gap-3 mt-4">
+        <a href="/listings/<%= listing._id %>/edit" class="btn btn-danger px-4 py-2 fw-semibold rounded-3">
+          <i class="fa-solid fa-pen-to-square me-1"></i> Edit Listing
+        </a>
+        <form action="/listings/<%= listing._id %>?_method=DELETE" method="POST">
+          <button type="submit" class="btn btn-dark px-4 py-2 fw-semibold rounded-3">
+            <i class="fa-solid fa-trash me-1"></i> Delete
+          </button>
+        </form>
+      </div>
+      <% } %>
+    </div>
+  </div>
+
+  <!-- Review Form -->
+  <% if(currUser) { %>
+  <div class="col-8 offset-2 mb-3">
+    <h4>Leave a Review</h4>
+    <form action="/listings/<%= listing._id %>/reviews" method="POST" novalidate class="needs-validation">
+      <div class="mb-3 mt-3">
+        <label for="rating" class="form-label">Rating</label>
+        <fieldset class="starability-slot">
+          <input type="radio" id="no-rate" class="input-no-rate" name="review[rating]" value="1" checked aria-label="No rating." />
+          <input type="radio" id="first-rate1" name="review[rating]" value="1" />
+          <label for="first-rate1" title="Terrible">1 star</label>
+          <input type="radio" id="first-rate2" name="review[rating]" value="2" />
+          <label for="first-rate2" title="Not good">2 stars</label>
+          <input type="radio" id="first-rate3" name="review[rating]" value="3" />
+          <label for="first-rate3" title="Average">3 stars</label>
+          <input type="radio" id="first-rate4" name="review[rating]" value="4" />
+          <label for="first-rate4" title="Very good">4 stars</label>
+          <input type="radio" id="first-rate5" name="review[rating]" value="5" />
+          <label for="first-rate5" title="Amazing">5 stars</label>
+        </fieldset>
+      </div>
+
+      <div class="mb-3">
+        <label for="comment" class="form-label">Comments</label>
+        <textarea name="review[comment]" id="comment" cols="30" rows="4" class="form-control" required></textarea>
+        <div class="invalid-feedback">Please add a valid comment for the review.</div>
+      </div>
+      <button type="submit" class="btn btn-outline-dark px-4 py-2 fw-semibold rounded-3">Submit</button>
+    </form>
+  </div>
+  <% } %>
+
+  <!-- Reviews Section -->
+  <% if(listing.reviews && listing.reviews.length > 0) { %>
+  <div class="col-8 offset-2">
+    <hr>
+    <h4 class="mb-3">All Reviews</h4>
+    <div class="row g-3">
+      <% for(let review of listing.reviews) { %>
+      <div class="col-12 col-md-6">
+        <div class="card p-3 shadow-sm border-0 bg-light rounded-4 h-100">
+          <div class="card-body p-0 d-flex flex-column justify-content-between">
+            <div>
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <h6 class="fw-bold mb-0">@<%= review.author ? review.author.username : "Anonymous" %></h6>
+                <p class="starability-result card-text" data-rating="<%= review.rating %>"></p>
+              </div>
+              <p class="card-text text-secondary mb-2">"<%= review.comment %>"</p>
+            </div>
+
+            <% if(currUser && review.author && currUser._id.equals(review.author._id)) { %>
+            <form action="/listings/<%= listing._id %>/reviews/<%= review._id %>?_method=DELETE" method="POST" class="mt-2">
+              <button class="btn btn-sm btn-dark">Delete</button>
+            </form>
+            <% } %>
+          </div>
+        </div>
+      </div>
+      <% } %>
+    </div>
+  </div>
+  <% } %>
+
+  <!-- Map Container Section -->
+  <div class="col-8 offset-2 mt-4">
+    <h5 class="fw-bold mb-3">Where you'll be</h5>
+    <div 
+      id="map" 
+      style="height: 400px; width: 100%;" 
+      class="rounded-4 border shadow-sm"
+      data-coordinates="<%= JSON.stringify((listing.geometry && listing.geometry.coordinates && listing.geometry.coordinates.length === 2) ? listing.geometry.coordinates : [77.2090, 28.6139]) %>"
+      data-title="<%= listing.title %>"
+      data-location="<%= listing.location %>, <%= listing.country %>"
+    ></div>
+  </div>
+</div>
+
+<!-- Map Script -->
+<script>
+  const mapToken = "<%= process.env.MAP_TOKEN %>";
+  const mapDiv = document.getElementById("map");
+
+  const coordinates = JSON.parse(mapDiv.dataset.coordinates);
+  const title = mapDiv.dataset.title;
+  const locationText = mapDiv.dataset.location;
+
+  mapboxgl.accessToken = mapToken;
+
+  const map = new mapboxgl.Map({
+    container: 'map',
+    style: 'mapbox://styles/mapbox/streets-v12',
+    center: coordinates,
+    zoom: 9
+  });
+
+  // Navigation Control (+ / - buttons)
+  map.addControl(new mapboxgl.NavigationControl());
+
+  // Red Pin Marker & Interactive Popup Setup
+  new mapboxgl.Marker({ color: '#fe424d' })
+    .setLngLat(coordinates)
+    .setPopup(
+      new mapboxgl.Popup({ offset: 25 }).setHTML(
+        `<h5 style="margin: 0; font-weight: bold;">${title}</h5>
+         <p style="margin: 4px 0 0 0; color: #555;">${locationText}</p>
+         <small style="color: #888;">Exact location provided after booking</small>`
+      )
+    )
+    .addTo(map);
+</script>
